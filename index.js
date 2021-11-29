@@ -66,9 +66,7 @@ function parse(code) {
 }
 
 function eval(tree, env) {
-	if (typeof tree === "symbol") {
-		return tree
-	} else if (typeof tree === "string") { // var
+	if (typeof tree === "string") { // var
 		return env(tree)
 	} else if (tree[0] === "l") { // lambda
 		return arg => eval(tree[2], (x) => { return x === tree[1] ? arg : env(x) })
