@@ -1,12 +1,16 @@
 const code = `
 ((l K
-  ((l FALSE
-    ((l I
-      ((l S
-        ((S K K) ((l f (l x (f x))) K true false))
-      ) (l x (l y (l z ((x z) (y z)))))) 
-    ) (l a a)) 
-  ) (l a (l b b))) 
+  ((l TRUE
+    ((l FALSE
+      ((l I
+        ((l S
+          ((l NOT
+            (NOT TRUE true false)
+          ) (l a (a FALSE TRUE)))
+        ) (l x (l y (l z ((x z) (y z)))))) 
+      ) (l a a)) 
+    ) (l a (l b b))) 
+  ) K)
 ) (l a (l b a)))
 `
 
