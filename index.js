@@ -5,7 +5,15 @@ const code = `
       ((l I
         ((l S
           ((l NOT
-            (NOT TRUE true false)
+            ((l AND
+              ((l OR
+                ((l BEQ?
+                  ((l XOR 
+                    (XOR FALSE FALSE true false)
+	          ) (l a (l b (a (NOT b) b))))
+	        ) (l a (l b (a b (NOT b)))))
+	      ) (l a (l b (a a b))))
+	    ) (l a (l b (a b a))))
           ) (l a (a FALSE TRUE)))
         ) (l x (l y (l z ((x z) (y z)))))) 
       ) (l a a)) 
