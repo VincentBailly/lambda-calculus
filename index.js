@@ -9,7 +9,21 @@ const code = `
               ((l OR
                 ((l BEQ?
                   ((l XOR 
-                    (XOR FALSE FALSE true false)
+                    ((l PAIR 
+                      ((l FIRST 
+                        ((l SECOND 
+                          ((l NIL 
+                            ((l NULL 
+                              (PAIR print_bool 
+                                (PAIR (XOR TRUE FALSE)
+                                  NIL
+                                )
+                              )
+                            ) (l p (p (l x (l y FALSE)))))
+                          ) (l x TRUE))
+                        ) (l p (p FALSE)))
+		      ) (l p (p TRUE)))
+	            ) (l a (l b (l f (f a b)))))
 	          ) (l a (l b (a (NOT b) b))))
 	        ) (l a (l b (a b (NOT b)))))
 	      ) (l a (l b (a a b))))
@@ -52,7 +66,9 @@ function parse(code) {
 }
 
 function eval(tree, env) {
-	if (typeof tree === "string") { // var
+	if (typeof tree === "symbol") {
+		return tree
+	} else if (typeof tree === "string") { // var
 		return env(tree)
 	} else if (tree[0] === "l") { // lambda
 		return arg => eval(tree[2], (x) => { return x === tree[1] ? arg : env(x) })
@@ -61,5 +77,39 @@ function eval(tree, env) {
 	}
 }
 
-//console.log(JSON.stringify(parse(code), undefined, 2))
-console.log(eval(parse(code), (x) => x))
+// We define the symbols that the program can use to talk to us.
+const printBool = Symbol("print bool")
+const env = (x) => {
+	if (x === "print_bool") {
+		return printBool 
+	} else {
+		throw new Error(`Unbound variable: ${x}`)
+	}
+}
+
+const result = eval(parse(code), env)
+
+function toList(r) { // convert a "lambda calculus list" to a JS list
+	if (r(a => b => "false") === "false") {
+		const first = r(a => b => a)
+		const second = r(a => b => b)
+		return [first, ...toList(second)]
+	} else {
+		return []
+	}
+}
+
+function renderBool(bool) { // converts "lambda calculus boolean" to JS string
+	return bool("true")("false")
+}
+
+function playEffect(list) {
+	list.reduce((acc, next) => {
+			if (acc === printBool) {
+				console.log(renderBool(next))
+			}
+		        return next
+		})
+}
+
+playEffect(toList(result))
