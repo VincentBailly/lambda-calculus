@@ -71,6 +71,9 @@ function eval(tree, env) {
 	} else if (tree[0] === "l") { // lambda
 		return arg => eval(tree[2], (x) => { return x === tree[1] ? arg : env(x) })
 	} else { // function application
+		// This allows for the syntactic suggar to call functions with multiple args.
+		// This syntactic suggar is a luxury that is not really needed.
+		// In the futur the syntactic suggar will be implemented in a script pre-processor instead to keep the eval as simple as it needs to be
 		return tree.slice(1).reduce((acc, next) => acc(eval(next, env)), eval(tree[0], env))
 	}
 }
