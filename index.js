@@ -18,7 +18,7 @@ function createTree(tokens) {
 		} else if (token === ")") {
 			return {...acc.parent,
 				children: [...acc.parent.children,
-					   {...acc, parent: undefined}]}
+					   acc.children]}
 		} else {
 			return {...acc, children: [...acc.children,token]}
 		}
